@@ -13,14 +13,12 @@ cards.forEach((card) => {
     card.addEventListener("mouseover", (e) => {
         var cardElement = e.currentTarget;
 
-        console.log(cardElement);
+        const name = cardElement.querySelector(".name").innerText;
 
-        const name = e.target.value;
-        console.log(name);
+        const { userName, mbti, intro } = getProfile(name);
 
-        // const { userName, mbti, intro } = getProfile();
-
-        
+        cardElement.querySelector(".mbti").innerText = mbti;
+        cardElement.querySelector(".intro").innerText = intro;
 
         cardElement.style.width = "30%";
         cardElement.style.height = "350px";
