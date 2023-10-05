@@ -1,1 +1,54 @@
-.
+.title {
+    margin-top: 100px;
+    margin: 0 auto;
+
+    font-weight: bold;
+
+}
+
+.card_block {
+    width: 90%;
+    height: auto;
+    
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 16px;
+    
+    display: flex;
+}
+
+.team_card {
+    width: 20%;
+    height: 200px;
+    
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 16px;
+
+    background-color: rgb(255, 255, 255);
+}
+
+.name {
+    margin: 0 auto;
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.mbti {
+    display: none;
+}
+
+.p {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
