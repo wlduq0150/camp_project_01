@@ -3,10 +3,12 @@ var cards = document.querySelectorAll(".team_card");
 const server = "";
 
 function getProfile(name) {
-    const response = fetch(server + "/profile", {
+    fetch(server + `/profile?name=${name}`, {
         method: "GET"
+    })
+    .then((response) => {
+        return response.json();
     });
-    return response.json();
 }
 
 cards.forEach((card) => {
@@ -15,7 +17,7 @@ cards.forEach((card) => {
 
         const name = cardElement.querySelector(".name").innerText;
 
-        const { userName, mbti, intro } = getProfile(name);
+        const { mbti, intro } = getProfile(name);
 
         cardElement.querySelector(".mbti").innerText = mbti;
         cardElement.querySelector(".intro").innerText = intro;
