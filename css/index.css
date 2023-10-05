@@ -1,7 +1,7 @@
 .title {
     margin-top: 100px;
-    margin: 0 auto;
 
+    text-align: center;
     font-weight: bold;
 
 }
@@ -11,15 +11,20 @@
     height: auto;
     
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 50px;
     padding: 16px;
     
     display: flex;
+    justify-content: space-around;
 }
 
 .team_card {
     width: 20%;
-    height: 200px;
+    height: 280px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     
     border: 1px solid rgb(0, 0, 0);
     border-radius: 16px;
@@ -30,7 +35,9 @@
 .name {
     margin: 0 auto;
 
-    font-size: 18px;
+    text-align: center;
+
+    font-size: 24px;
     font-weight: bold;
 }
 
@@ -38,7 +45,7 @@
     display: none;
 }
 
-.p {
+.intro {
     display: none;
 }
 
