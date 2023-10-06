@@ -9,13 +9,15 @@ var firebaseConfig = {
   appId: "1:867454144316:web:a5fa28b431b5fbd0625839"
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+var init = firebase.initializeApp(firebaseConfig);
+
 
 // Function to update card styles on mouseover and mouseout
 function updateCardStyles(cardElement, isMouseOver) {
-  cardElement.style.width = isMouseOver ? "30%" : "20%";
-  cardElement.style.height = isMouseOver ? "350px" : "280px";
+  cardElement.style.width = isMouseOver ? "30%" : "18%";
+  cardElement.style.height = isMouseOver ? "350px" : "320px";
   cardElement.querySelector(".mbti").style.display = isMouseOver ? "block" : "none";
+  cardElement.querySelector(".intro").style.display = isMouseOver ? "block" : "none";
   cardElement.querySelector(".blog").style.display = isMouseOver ? "block" : "none";
   cardElement.querySelector(".motto").style.display = isMouseOver ? "block" : "none";
 }
@@ -47,10 +49,13 @@ function addProfileData(name, mbti, blog, motto) {
 // Attach mouseover event listeners to the cards
 var cards = document.querySelectorAll(".team_card");
 
-cards.forEach((card) => {
-  var name = card.getAttribute("value");
+const commentSubmitButton = document.querySelector(".comment_submit button");
 
-  card.addEventListener("mouseover", (e) => {
+cards.forEach((card) => {
+
+    var name = card.getAttribute("value");
+
+    card.addEventListener("mouseover", (e) => {
       updateCardStyles(e.currentTarget, true);
 
       // Fetch and display profile data when hovered
@@ -62,13 +67,13 @@ cards.forEach((card) => {
           if (profile) {
               // Find the card associated with the name
               var mbtiSpan = card.querySelector(".mbti");
-              var blogSpan = card.querySelector(".blog");
+              var blogSpan = card.querySelector(".blog-link");
               var mottoSpan = card.querySelector(".motto");
 
               // Update card display with fetched profile data
-              mbtiSpan.textContent = "MBTI: " + profile.mbti;
-              blogSpan.textContent = "Blog: " + profile.blog;
-              mottoSpan.textContent = "Motto: " + profile.motto;
+              mbtiSpan.textContent = profile.mbti;
+              blogSpan.textContent = profile.blog;
+              mottoSpan.textContent = profile.motto;
           }
       });
   });
@@ -83,3 +88,32 @@ addProfileData("김지엽", "ENFP", "https://example.com/kim-blog", "Live life t
 addProfileData("박조은", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
+
+
+commentSubmitButton.addEventListener("click", async (e) => {
+    const name_ = document.querySelector(".comment_name");
+    const password_ = document.querySelector(".comment_password");
+    const content_ = document.querySelector(".comment_text");
+
+    const name = name_.value ? name_.value : "익명";
+    const password = password_.value ? password_.value : "";
+    const content = content_.value;
+
+    if (!content) {
+        alert("내용은 필수입니다!");
+        return;
+    }
+
+    // const result = await postComment(name, password, content);
+    const result = true;
+
+    if (result) {
+        alert("댓글 등록 완료!");
+    } else {
+        alert("댓글 등록 실패!(이름과 내용은 필수입니다)");
+    }
+
+    name_.value = "";
+    password_.value = "";
+    content_.value = "";
+});
