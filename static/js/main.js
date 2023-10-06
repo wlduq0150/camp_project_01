@@ -14,8 +14,8 @@ var init = firebase.initializeApp(firebaseConfig);
 
 // Function to update card styles on mouseover and mouseout
 function updateCardStyles(cardElement, isMouseOver) {
-  cardElement.style.width = isMouseOver ? "30%" : "20%";
-  cardElement.style.height = isMouseOver ? "350px" : "280px";
+  cardElement.style.width = isMouseOver ? "30%" : "18%";
+  cardElement.style.height = isMouseOver ? "350px" : "320px";
   cardElement.querySelector(".mbti").style.display = isMouseOver ? "block" : "none";
   cardElement.querySelector(".intro").style.display = isMouseOver ? "block" : "none";
   cardElement.querySelector(".blog").style.display = isMouseOver ? "block" : "none";
@@ -49,41 +49,11 @@ function addProfileData(name, mbti, blog, motto) {
 // Attach mouseover event listeners to the cards
 var cards = document.querySelectorAll(".team_card");
 
-const server = "";
-const cards = document.querySelectorAll(".team_card");
 const commentSubmitButton = document.querySelector(".comment_submit button");
 
-console.log(commentSubmitButton);
-
-async function getProfile(name) {
-    fetch(server + `/profile?name=${name}`, {
-        method: "GET"
-    })
-    .then((response) => {
-        return response.json();
-    });
-}
-
-async function postComment(
-    name,
-    password,
-    content
-) {
-    if (!name || !content) return false;
-
-    const response = fetch(server + `/writeComment`, {
-        method: "POST",
-        body: JSON.stringify({
-            name,
-            password,
-            content
-        })
-    });
-
-    return response.json().result;
-}
-
 cards.forEach((card) => {
+
+    var name = card.getAttribute("value");
 
     card.addEventListener("mouseover", (e) => {
       updateCardStyles(e.currentTarget, true);
