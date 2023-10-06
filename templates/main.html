@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/main.css"></link>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"></link>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/comment.css') }}"></link>
     <title>TEAM 6 조별과제</title>
 </head>
 
@@ -15,25 +17,48 @@
     <div class="card_block">
         <div class="team_card">
             <h1 class="name">김지엽</h1>
-            <span class="mbti">MBTI: </span>
+            <span class="mbti">MBTI</span>
             <p class="intro">본인소개</p>
         </div>
         <div class="team_card" value="민찬기">
             <h1 class="name">민찬기</h1>
-            <span class="mbti">MBTI: </span>
+            <span class="mbti">MBTI</span>
             <p class="intro">본인소개</p>
         </div>
         <div class="team_card" value="박조은">
             <h1 class="name">박조은</h1>
-            <span class="mbti">MBTI: </span>
+            <span class="mbti">MBTI</span>
             <p class="intro">본인소개</p>
         </div>
         <div class="team_card" value="김세웅">
             <h1 class="name">김세웅</h1>
-            <span class="mbti">MBTI: </span>
+            <span class="mbti">MBTI</span>
             <p class="intro">본인소개</p>
         </div>
     </div>
+
+    <div class="comment_block">
+        <div class="comment_head">
+            <input type="text" class="comment_name" placeholder="닉네임">
+            <input type="password" class="comment_password" placeholder="암호">
+        </div>
+
+        <div class="comment_body">
+            <div class="comment_content">
+                <textarea type="text" class="comment_text" placeholder="내용을 입력하세요."></textarea>
+            </div>
+            <div class="comment_submit">
+                <button type="button">등록</button>
+            </div>
+        </div>
+    </div>
+    
     <script src="{{ url_for('static', filename='js/main.js')}}"></script>
 </body>
 </html>
+
+
+    
+
+
+    
