@@ -8,6 +8,8 @@ var firebaseConfig = {
   messagingSenderId: "867454144316",
   appId: "1:867454144316:web:a5fa28b431b5fbd0625839"
 };
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 // Function to update card styles on mouseover and mouseout
 function updateCardStyles(cardElement, isMouseOver) {
