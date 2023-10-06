@@ -1,0 +1,24 @@
+enviornment requirement
+
+
+* Create a Virtual Environment (Optional but Recommended):
+    * It's a good practice to work within a virtual environment to manage your project dependencies. If you're not already using a virtual environment, you can create one:  `` python -m venv venv   ``
+    * Activate the virtual environment:
+    On macOS and Linux:
+    ``source venv/bin/activate``
+    * On Windows (using Command Prompt):
+    ``venv\Scripts\activate ``
+    On Windows (using PowerShell):
+    ``.\venv\Scripts\Activate.ps1 ``
+* Install Flask:
+    * With the virtual environment activated, use pip to install Flask:
+    ``pip install Flask ``
+* Check Flask Installation:
+    * You can verify that Flask has been installed correctly by running:
+    ``python -c "import flask; print(flask.__version__)" ``
+    * You should see the version of Flask printed without any errors.
+* Run Your Application:
+    * Once Flask is installed, you should be able to run your Python application without encountering the "No module named flask" 
+    error:``python app.py ``
+* Replace app.py with the actual name of your Python application script if it's different.
+By following these steps, you should have Flask installed in your Python environment, and your application should run without any ImportError related to Flask.
