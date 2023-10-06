@@ -1,39 +1,53 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}"></link>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <title>TEAM 6 조별과제</title>
 </head>
-
 <body>
     <div class="title"> 
-    <h1>TEAM 6: Able</h1>
+        <h1>TEAM 6: Able</h1>
     </div>
     <div class="card_block">
         <div class="team_card">
             <h1 class="name">김지엽</h1>
-            <span class="mbti">MBTI: </span>
-            <p class="intro">본인소개</p>
+            <span class="mbti">MBTI: <span class="mbti-value">Loading...</span></span>
+            <div class="intro">
+                <p>본인소개</p>
+                <p class="blog">Blog: <a href="#" target="_blank" class="blog-link">Loading...</a></p>
+                <p class="motto">Motto: <span class="motto-value">Loading...</span></p>
+            </div>
         </div>
         <div class="team_card" value="민찬기">
             <h1 class="name">민찬기</h1>
-            <span class="mbti">MBTI: </span>
-            <p class="intro">본인소개</p>
+            <span class="mbti">MBTI: <span class="mbti-value">Loading...</span></span>
+            <div class="intro">
+                <p>본인소개</p>
+                <p class="blog">Blog: <a href="#" target="_blank" class="blog-link">Loading...</a></p>
+                <p class="motto">Motto: <span class="motto-value">Loading...</span></p>
+            </div>
         </div>
         <div class="team_card" value="박조은">
             <h1 class="name">박조은</h1>
-            <span class="mbti">MBTI: </span>
-            <p class="intro">본인소개</p>
+            <span class="mbti">MBTI: <span class="mbti-value">Loading...</span></span>
+            <div class="intro">
+                <p>본인소개</p>
+                <p class="blog">Blog: <a href="#" target="_blank" class="blog-link">Loading...</a></p>
+                <p class="motto">Motto: <span class="motto-value">Loading...</span></p>
+            </div>
         </div>
         <div class="team_card" value="김세웅">
             <h1 class="name">김세웅</h1>
-            <span class="mbti">MBTI: </span>
-            <p class="intro">본인소개</p>
+            <span class="mbti">MBTI: <span class="mbti-value">Loading...</span></span>
+            <div class="intro">
+                <p>본인소개</p>
+                <p class="blog">Blog: <a href="#" target="_blank" class="blog-link">Loading...</a></p>
+                <p class="motto">Motto: <span class="motto-value">Loading...</span></p>
+            </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
