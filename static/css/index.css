@@ -65,3 +65,15 @@
     font-size: 20px;
     font-weight: bold;
 }
+
+.blog-link {
+    margin: 0 auto;
+
+    font-size: 16px;
+}
+
+.motto {
+    margin: 0 auto;
+
+    text-align: center;
+}
