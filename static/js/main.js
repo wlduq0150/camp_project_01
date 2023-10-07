@@ -24,17 +24,17 @@ function updateCardStyles(cardElement, isMouseOver) {
 
 // Function to add profile data to Firebase
 function addProfileData(name, mbti, blog, motto) {
-  var profileData = {
+  const profileData = {
       mbti: mbti,
       blog: blog,
       motto: motto
   };
 
   // Reference to the Firebase database
-  var dbRef = firebase.database().ref();
+  const dbRef = firebase.database().ref();
 
   // Reference to the "profiles" node where you want to store the data
-  var profilesRef = dbRef.child("profiles");
+  const profilesRef = dbRef.child("profiles");
 
   // Add the data under the team member's name
   profilesRef.child(name).set(profileData)
@@ -48,8 +48,6 @@ function addProfileData(name, mbti, blog, motto) {
 
 // Attach mouseover event listeners to the cards
 var cards = document.querySelectorAll(".team_card");
-
-const commentSubmitButton = document.querySelector(".comment_submit button");
 
 cards.forEach((card) => {
 
@@ -90,6 +88,77 @@ addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life t
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 
 
+function newComment(name, password, comment) {
+    const commentData = {
+        name,
+        password,
+        comment,
+    };
+  
+    // Reference to the Firebase database
+    const dbRef = firebase.database().ref();
+  
+    // Reference to the "profiles" node where you want to store the data
+    const profilesRef = dbRef.child("comments");
+  
+    // Add the data under the team member's name
+    return profilesRef.child(name).set(commentData)
+        .then(function() {
+            console.log("Data added to Firebase successfully.");
+            return true;
+        })
+        .catch(function(error) {
+            console.error("Error adding data to Firebase: ", error);
+            return false;
+        });
+}
+
+// {name, comment}[]
+function getComments() {
+    const database = firebase.database();
+
+    const commentsRef = database.ref("comments");
+
+    commentsRef.once("value", (snapshot) => {
+        const commentsData = snapshot.val();
+
+        Object.keys(commentsData).forEach((commentData) => {
+            addCommentToScreen(commentData);
+        });
+    });
+}
+
+function isPasswordCorrect(name, password) {
+    const database = firebase.database();
+
+    const commentRef = database.ref("comments").child(name);
+
+    commentRef.once("value", (snapshot) => {
+        const commentData = snapshot.val();
+
+        if (commentData.password === password) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+}
+
+function updateComment(name, password, newComment) {
+
+}
+
+function deleteComment(name, password) {
+
+}
+
+// { name: "김지엽", password: "1234", content: "하이" }
+function addCommentToScreen(commentData) {
+    
+}
+
+const commentSubmitButton = document.querySelector(".comment_submit button");
+
 commentSubmitButton.addEventListener("click", async (e) => {
     const name_ = document.querySelector(".comment_name");
     const password_ = document.querySelector(".comment_password");
@@ -104,8 +173,9 @@ commentSubmitButton.addEventListener("click", async (e) => {
         return;
     }
 
-    // const result = await postComment(name, password, content);
-    const result = true;
+    const result = await newComment(name, password, content);
+
+    console.log(result);
 
     if (result) {
         alert("댓글 등록 완료!");
@@ -117,3 +187,5 @@ commentSubmitButton.addEventListener("click", async (e) => {
     password_.value = "";
     content_.value = "";
 });
+
+getComments();
