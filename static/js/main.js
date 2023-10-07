@@ -24,17 +24,17 @@ function updateCardStyles(cardElement, isMouseOver) {
 
 // Function to add profile data to Firebase
 function addProfileData(name, mbti, blog, motto) {
-  var profileData = {
+  const profileData = {
       mbti: mbti,
       blog: blog,
       motto: motto
   };
 
   // Reference to the Firebase database
-  var dbRef = firebase.database().ref();
+  const dbRef = firebase.database().ref();
 
   // Reference to the "profiles" node where you want to store the data
-  var profilesRef = dbRef.child("profiles");
+  const profilesRef = dbRef.child("profiles");
 
   // Add the data under the team member's name
   profilesRef.child(name).set(profileData)
@@ -88,6 +88,31 @@ addProfileData("김지엽", "ENFP", "https://example.com/kim-blog", "Live life t
 addProfileData("박조은", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
+
+
+function addComment(name, password, comment) {
+    const commentData = {
+        name,
+        password,
+        comment,
+    };
+  
+    // Reference to the Firebase database
+    const dbRef = firebase.database().ref();
+  
+    // Reference to the "profiles" node where you want to store the data
+    const profilesRef = dbRef.child("comments");
+  
+    // Add the data under the team member's name
+    profilesRef.child(name).set(commentData)
+        .then(function() {
+            console.log("Data added to Firebase successfully.");
+        })
+        .catch(function(error) {
+            console.error("Error adding data to Firebase: ", error);
+        });
+}
+
 
 
 commentSubmitButton.addEventListener("click", async (e) => {
