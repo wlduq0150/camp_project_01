@@ -154,7 +154,10 @@ function deleteComment(name, password) {
 
 // { name: "김지엽", password: "1234", content: "하이" }
 function addCommentToScreen(commentData) {
-    
+const addCommnetToScreen = document.querySelector(".comment_list");
+const comment_list = document.createElement("li")
+
+commentList.appendChild(comment_list);
 }
 
 const commentSubmitButton = document.querySelector(".comment_submit button");
