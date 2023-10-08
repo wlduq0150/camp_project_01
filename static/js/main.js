@@ -217,8 +217,6 @@ function addCommentToScreen(commentData) {
     commentList.appendChild(commentElement); // li -> comment_list
 }
 
-const commentSubmitButton = document.querySelector(".comment_submit button");
-
 commentSubmitButton.addEventListener("click", async (e) => {
     const name_ = document.querySelector(".comment_name");
     const password_ = document.querySelector(".comment_password");
@@ -233,11 +231,19 @@ commentSubmitButton.addEventListener("click", async (e) => {
         return;
     }
 
-    const result = await newComment(name, password, content);
+    // Authenticate the user (implement Firebase Auth logic here)
 
-    console.log(result);
+    // Add the new comment
+    const result = await addNewComment(name, password, content);
 
     if (result) {
+        // Successfully added the comment, now display it
+        addCommentToScreen({
+            name: name,
+            content: content,
+            timestamp: new Date().toISOString(),
+        });
+
         alert("댓글 등록 완료!");
     } else {
         alert("댓글 등록 실패!(이름과 내용은 필수입니다)");
@@ -247,9 +253,5 @@ commentSubmitButton.addEventListener("click", async (e) => {
     password_.value = "";
     content_.value = "";
 });
-
-
-
-//updateComment("테스트", "1234", "수정 완료!");
 
 getComments();
