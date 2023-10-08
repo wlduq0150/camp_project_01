@@ -88,6 +88,7 @@ addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life t
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 
 
+// 사용 예시: const result = await newComment("이름", "비밀번호", "댓글");
 function newComment(name, password, comment) {
     const commentData = {
         name,
@@ -95,13 +96,13 @@ function newComment(name, password, comment) {
         comment,
     };
   
-    // Reference to the Firebase database
+    // 파이어베이스 참조
     const dbRef = firebase.database().ref();
   
-    // Reference to the "profiles" node where you want to store the data
+    // comments 참조
     const profilesRef = dbRef.child("comments");
   
-    // Add the data under the team member's name
+    // name 아래에 댓글 추가
     return profilesRef.child(name).set(commentData)
         .then(function() {
             console.log("Data added to Firebase successfully.");
@@ -113,7 +114,7 @@ function newComment(name, password, comment) {
         });
 }
 
-// {name, comment}[]
+
 function getComments() {
     const database = firebase.database();
 
@@ -122,27 +123,41 @@ function getComments() {
     commentsRef.once("value", (snapshot) => {
         const commentsData = snapshot.val();
 
-        Object.keys(commentsData).forEach((commentData) => {
+        Object.keys(commentsData).forEach((name) => {
+            const commentData = commentsData[name];
             addCommentToScreen(commentData);
         });
     });
 }
 
-function isPasswordCorrect(name, password) {
+
+// 사용 예시(1): const result = await isPasswordCorrect("이름", "비밀번호");
+
+// 사용 예시(2): 
+// isPasswordCorrect("이름", "비밀번호")
+// .then((result) => {
+//     console.log(result);
+// })
+// .catch((e) => {
+//     console.log(e);
+// });
+
+async function isPasswordCorrect(name, password) {
     const database = firebase.database();
 
     const commentRef = database.ref("comments").child(name);
 
-    commentRef.once("value", (snapshot) => {
-        const commentData = snapshot.val();
+    const snapshot = await commentRef.once("value");
 
-        if (commentData.password === password) {
-            return true;
-        } else {
-            return false;
-        }
-    });
+    const commentData = snapshot.val();
+
+    if (commentData.password === password) {
+        return true;
+    } else {
+        return false;
+    }
 }
+  
 
 function updateComment(name, password, newComment) {
 
@@ -153,12 +168,7 @@ function deleteComment(name, password) {
 }
 
 // { name: "김지엽", password: "1234", content: "하이" }
-function addCommentToScreen(commentData) {
-const addCommnetToScreen = document.querySelector(".comment_list");
-const comment_list = document.createElement("li")
-
-commentList.appendChild(comment_list);
-}
+function addCommentToScreen(commentData) {}
 
 const commentSubmitButton = document.querySelector(".comment_submit button");
 
