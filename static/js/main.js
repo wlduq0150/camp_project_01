@@ -82,17 +82,35 @@ cards.forEach((card) => {
 });
 
 // Example usage to add data (you can call this when needed)
-addProfileData("김지엽", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
+addProfileData("김지엽", "ENFJ", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("박조은", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 
 
+async function hashPassword(password) {
+  try {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+    return hashHex;
+  } catch (error) {
+    console.error('Error hashing password:', error);
+    return null;
+  }
+}
+
 // 사용 예시: const result = await newComment("이름", "비밀번호", "댓글");
-function newComment(name, password, comment) {
+async function newComment(name, password, comment) {
+    const hashedPassword = await hashPassword(password);
     const commentData = {
         name,
-        password,
+        password: hashedPassword,
         comment,
     };
   
@@ -123,53 +141,80 @@ function getComments() {
     commentsRef.once("value", (snapshot) => {
         const commentsData = snapshot.val();
 
-        Object.keys(commentsData).forEach((name) => {
-            const commentData = commentsData[name];
-            addCommentToScreen(commentData);
-        });
+        if (commentsData) {
+            Object.keys(commentsData).forEach((name) => {
+                const commentData = commentsData[name];
+                addCommentToScreen(commentData);
+            });
+        }
     });
 }
 
+async function updateComment(name, password, updatedContent) {
+    var commentRef = firebase.database().ref("comments/" + name);
 
-// 사용 예시(1): const result = await isPasswordCorrect("이름", "비밀번호");
+    const hashedPassword = await hashPassword(password);
 
-// 사용 예시(2): 
-// isPasswordCorrect("이름", "비밀번호")
-// .then((result) => {
-//     console.log(result);
-// })
-// .catch((e) => {
-//     console.log(e);
-// });
-
-async function isPasswordCorrect(name, password) {
-    const database = firebase.database();
-
-    const commentRef = database.ref("comments").child(name);
-
-    const snapshot = await commentRef.once("value");
-
-    const commentData = snapshot.val();
-
-    if (commentData.password === password) {
-        return true;
-    } else {
-        return false;
-    }
-}
-  
-
-function updateComment(name, password, newComment) {
-
+    commentRef.once("value").then(function (snapshot) {
+        var comment = snapshot.val();
+        if (comment && comment.password === hashedPassword) {
+            if (updatedContent) {
+                // Update the comment content
+                commentRef.update({ comment: updatedContent })
+                    .then(function () {
+                        alert("댓글 수정 완료!");
+                    })
+                    .catch(function (error) {
+                        console.error("댓글 수정 실패: ", error);
+                    });
+            } else {
+                alert("댓글 수정을 취소했습니다.");
+            }
+        } else {
+            alert("댓글 수정 실패: 이름 또는 암호가 일치하지 않습니다.");
+        }
+    });
 }
 
-function deleteComment(name, password) {
+async function deleteComment(name, password) {
+    // Hash the provided password (use a library like bcrypt)
+    const hashedPassword = await hashPassword(password);
 
+    // Check if the password matches the hashed password in the database
+    var commentRef = firebase.database().ref("comments/" + name);
+    commentRef.once("value").then(function (snapshot) {
+        var comment = snapshot.val();
+        if (comment && comment.password === hashedpassword) {
+            // Delete the comment
+            commentRef.remove()
+                .then(function () {
+                    alert("댓글 삭제 완료!");
+                })
+                .catch(function (error) {
+                    console.error("댓글 삭제 실패: ", error);
+                });
+        } else {
+            alert("댓글 삭제 실패: 이름 또는 암호가 일치하지 않습니다.");
+        }
+    });
 }
 
 // { name: "김지엽", password: "1234", content: "하이" }
 function addCommentToScreen(commentData) {
     console.log(commentData);
+    const commentList = document.querySelector(".comment_list");
+
+    const commentElement = document.createElement("li");
+    
+    const name = document.createElement("span");
+    name.textContent = commentData.name;
+    const content = document.createElement("p");
+    content.textContent = commentData.comment;
+
+    commentElement.appendChild(name); // name -> li
+    commentElement.appendChild(content); // p -> li
+
+    commentList.appendChild(commentElement); // li -> comment_list
 }
 
 const commentSubmitButton = document.querySelector(".comment_submit button");
@@ -202,5 +247,9 @@ commentSubmitButton.addEventListener("click", async (e) => {
     password_.value = "";
     content_.value = "";
 });
+
+
+
+//updateComment("테스트", "1234", "수정 완료!");
 
 getComments();
