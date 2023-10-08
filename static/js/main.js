@@ -45,6 +45,57 @@ function addProfileData(name, mbti, blog, motto) {
           console.error("Error adding data to Firebase: ", error);
       });
 }
+// Function to display comments
+function displayComments(comments) {
+    // Select the ".comments" div where comments will be displayed
+    var commentsContainer = document.querySelector(".comments");
+
+    // Clear any existing comments
+    commentsContainer.innerHTML = "";
+
+    // Loop through the comments and create HTML elements for each comment
+    comments.forEach(function(comment) {
+        // Create a comment container div
+        var commentDiv = document.createElement("div");
+        commentDiv.classList.add("comment");
+
+        // Create elements for comment details: name, content, and timestamp
+        var nameElement = document.createElement("strong");
+        nameElement.textContent = comment.name;
+
+        var contentElement = document.createElement("p");
+        contentElement.textContent = comment.content;
+
+        var timestampElement = document.createElement("small");
+        timestampElement.textContent = new Date(comment.timestamp).toLocaleString();
+
+        // Append the comment details to the comment container
+        commentDiv.appendChild(nameElement);
+        commentDiv.appendChild(contentElement);
+        commentDiv.appendChild(timestampElement);
+
+        // Append the comment container to the comments container
+        commentsContainer.appendChild(commentDiv);
+    });
+}
+
+// Example usage of the displayComments function
+// Replace this with your actual comments data
+var commentsData = [
+    {
+        name: "User1",
+        content: "This is the first comment.",
+        timestamp: "2023-10-08T12:00:00Z"
+    },
+    {
+        name: "User2",
+        content: "This is the second comment.",
+        timestamp: "2023-10-08T12:30:00Z"
+    }
+];
+
+// Call the displayComments function with your comments data
+displayComments(commentsData);
 
 // Attach mouseover event listeners to the cards
 var cards = document.querySelectorAll(".team_card");
@@ -89,7 +140,6 @@ addProfileData("박조은", "ENFP", "https://example.com/kim-blog", "Live life t
 addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 
-
 commentSubmitButton.addEventListener("click", async (e) => {
     const name_ = document.querySelector(".comment_name");
     const password_ = document.querySelector(".comment_password");
@@ -104,16 +154,118 @@ commentSubmitButton.addEventListener("click", async (e) => {
         return;
     }
 
-    // const result = await postComment(name, password, content);
-    const result = true;
-
-    if (result) {
-        alert("댓글 등록 완료!");
-    } else {
-        alert("댓글 등록 실패!(이름과 내용은 필수입니다)");
+    // Authenticate the user
+    var user = firebase.auth().currentUser;
+    if (!user) {
+        alert("로그인이 필요합니다!");
+        return;
     }
+
+    // Hash the provided password using bcrypt
+    const saltRounds = 10; // You can adjust the number of salt rounds for security
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create a new comment object
+    const newComment = {
+        name: name,
+        password: hashedPassword,
+        content: content,
+        timestamp: new Date().toISOString(),
+    };
+
+    // Add the comment to the database
+    var commentsRef = firebase.database().ref("comments");
+    var newCommentRef = commentsRef.push();
+    newCommentRef.set(newComment)
+        .then(function() {
+            alert("댓글 등록 완료!");
+        })
+        .catch(function(error) {
+            console.error("댓글 등록 실패: ", error);
+        });
 
     name_.value = "";
     password_.value = "";
     content_.value = "";
+});
+// Delete button event listener
+commentDeleteButton.addEventListener("click", async (e) => {
+    const commentId = e.target.getAttribute("data-comment-id");
+    const password = prompt("Please enter the password to delete the comment:");
+
+    if (!password) {
+        alert("Password is required to delete the comment.");
+        return;
+    }
+
+    // Authenticate the user
+    var user = firebase.auth().currentUser;
+    if (!user) {
+        alert("로그인이 필요합니다!");
+        return;
+    }
+
+    // Hash the provided password (use a library like bcrypt)
+    const hashedPassword = await hashPassword(password);
+
+    // Check if the password matches the hashed password in the database
+    var commentRef = firebase.database().ref("comments/" + commentId);
+    commentRef.once("value").then(function(snapshot) {
+        var comment = snapshot.val();
+        if (comment && comment.name === user.displayName && comment.password === hashedPassword) {
+            // Delete the comment
+            commentRef.remove()
+                .then(function() {
+                    alert("댓글 삭제 완료!");
+                })
+                .catch(function(error) {
+                    console.error("댓글 삭제 실패: ", error);
+                });
+        } else {
+            alert("댓글 삭제 실패: 이름 또는 암호가 일치하지 않습니다.");
+        }
+    });
+});
+// Edit button event listener
+commentEditButton.addEventListener("click", async (e) => {
+    const commentId = e.target.getAttribute("data-comment-id");
+    const password = prompt("Please enter the password to edit the comment:");
+
+    if (!password) {
+        alert("Password is required to edit the comment.");
+        return;
+    }
+
+    // Authenticate the user
+    var user = firebase.auth().currentUser;
+    if (!user) {
+        alert("로그인이 필요합니다!");
+        return;
+    }
+
+    // Hash the provided password (use a library like bcrypt)
+    const hashedPassword = await hashPassword(password);
+
+    // Check if the password matches the hashed password in the database
+    var commentRef = firebase.database().ref("comments/" + commentId);
+    commentRef.once("value").then(function(snapshot) {
+        var comment = snapshot.val();
+        if (comment && comment.name === user.displayName && comment.password === hashedPassword) {
+            const updatedContent = prompt("Please enter the updated comment:");
+            if (updatedContent) {
+                // Update the comment content
+                commentRef.update({ content: updatedContent })
+                    .then(function() {
+                        alert("댓글 수정 완료!");
+                    })
+                    .catch(function(error) {
+                        console.error("댓글 수정 실패: ", error);
+                    });
+            } else {
+                alert("댓글 수정을 취소했습니다.");
+            }
+        } else {
+            alert("댓글 수정 실패: 이름 또는 암호가 일치하지 않습니다.");
+        }
+    });
 });
