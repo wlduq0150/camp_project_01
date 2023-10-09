@@ -87,6 +87,9 @@ addProfileData("박조은", "ENFP", "https://example.com/kim-blog", "Live life t
 addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 
+let showCommentCount = 3;
+let currentCommentCount = 3;
+let isLoading = false;
 
 async function hashPassword(password) {
   try {
@@ -107,8 +110,12 @@ async function hashPassword(password) {
 
 // 사용 예시: const result = await newComment("이름", "비밀번호", "댓글");
 async function newComment(name, password, comment) {
+    // 현재 시간을 id로 설정
+    const id = Date.now().toString();
+    // password 암호화
     const hashedPassword = await hashPassword(password);
     const commentData = {
+        id,
         name,
         password: hashedPassword,
         comment,
@@ -120,49 +127,84 @@ async function newComment(name, password, comment) {
     // comments 참조
     const profilesRef = dbRef.child("comments");
   
-    // name 아래에 댓글 추가
-    return profilesRef.child(name).set(commentData)
-        .then(function() {
-            console.log("Data added to Firebase successfully.");
-            return true;
-        })
-        .catch(function(error) {
-            console.error("Error adding data to Firebase: ", error);
-            return false;
-        });
+    // id 아래에 댓글 추가
+    try {
+        await profilesRef.child(id).set(commentData);
+    } catch (e) {
+        return false;
+    }
+
+    reloadComments();
+
+    return true;
 }
 
 
-function getComments() {
+async function reloadComments() {
+    isLoading = true;
+
+    deleteComments();
+
     const database = firebase.database();
 
     const commentsRef = database.ref("comments");
 
-    commentsRef.once("value", (snapshot) => {
-        const commentsData = snapshot.val();
+    const commentsData = (await commentsRef.once("value")).val();
 
-        if (commentsData) {
-            Object.keys(commentsData).forEach((name) => {
-                const commentData = commentsData[name];
-                addCommentToScreen(commentData);
+    if (commentsData) {
+        const commentIds = Object.keys(commentsData);
+
+        commentIds
+            .slice(0, showCommentCount)
+            .forEach((id) => {
+                const commentData = commentsData[id];
+                addCommentToScreen({ id, ...commentData });
             });
-        }
-    });
+
+        currentCommentCount = commentIds.length;
+    }
+
+
+    // commentsRef.once("value", (snapshot) => {
+    //     const commentsData = snapshot.val();
+
+    //     if (commentsData) {
+    //         Object.keys(commentsData)
+    //             .slice(0, showCommentCount)
+    //             .forEach((id) => {
+    //                 const commentData = commentsData[id];
+    //                 addCommentToScreen({ id, ...commentData });
+    //             });
+    //     }
+    // });
+
+    isLoading = false;
 }
 
-async function updateComment(name, password, updatedContent) {
-    var commentRef = firebase.database().ref("comments/" + name);
+function deleteComments() {
+    document.querySelectorAll("li").forEach((comment) => {
+        comment.remove();
+    });
+} 
+
+async function updateComment(id) {
+
+    var commentRef = firebase.database().ref("comments/" + id);
+
+    const password = prompt("암호를 입력해주세요.");
+    const updateContent = prompt("수정할 내용을 입력해주세요.");
 
     const hashedPassword = await hashPassword(password);
 
     commentRef.once("value").then(function (snapshot) {
         var comment = snapshot.val();
         if (comment && comment.password === hashedPassword) {
-            if (updatedContent) {
+            if (updateContent) {
                 // Update the comment content
-                commentRef.update({ comment: updatedContent })
+                commentRef.update({ comment: updateContent })
                     .then(function () {
                         alert("댓글 수정 완료!");
+                        reloadComments();
                     })
                     .catch(function (error) {
                         console.error("댓글 수정 실패: ", error);
@@ -171,24 +213,26 @@ async function updateComment(name, password, updatedContent) {
                 alert("댓글 수정을 취소했습니다.");
             }
         } else {
-            alert("댓글 수정 실패: 이름 또는 암호가 일치하지 않습니다.");
+            alert("댓글 수정 실패: 암호가 일치하지 않습니다.");
         }
     });
 }
 
-async function deleteComment(name, password) {
+async function deleteComment(id) {
+    const password = prompt("암호를 입력해주세요.");
     // Hash the provided password (use a library like bcrypt)
     const hashedPassword = await hashPassword(password);
 
     // Check if the password matches the hashed password in the database
-    var commentRef = firebase.database().ref("comments/" + name);
+    var commentRef = firebase.database().ref("comments/" + id);
     commentRef.once("value").then(function (snapshot) {
         var comment = snapshot.val();
-        if (comment && comment.password === hashedpassword) {
+        if (comment && comment.password === hashedPassword) {
             // Delete the comment
             commentRef.remove()
                 .then(function () {
                     alert("댓글 삭제 완료!");
+                    reloadComments();
                 })
                 .catch(function (error) {
                     console.error("댓글 삭제 실패: ", error);
@@ -201,18 +245,48 @@ async function deleteComment(name, password) {
 
 // { name: "김지엽", password: "1234", content: "하이" }
 function addCommentToScreen(commentData) {
-    console.log(commentData);
     const commentList = document.querySelector(".comment_list");
 
     const commentElement = document.createElement("li");
+    commentElement.classList.add("comment");
+
+    const contentBlock = document.createElement("div");
+    contentBlock.classList.add("content_block")
     
     const name = document.createElement("span");
     name.textContent = commentData.name;
     const content = document.createElement("p");
     content.textContent = commentData.comment;
 
-    commentElement.appendChild(name); // name -> li
-    commentElement.appendChild(content); // p -> li
+    contentBlock.appendChild(name);
+    contentBlock.appendChild(content);
+
+    const buttonBlock = document.createElement("div");
+    buttonBlock.classList.add("button_block");
+
+    const updateButton = document.createElement("button");
+    updateButton.classList.add("update_button");
+    updateButton.dataset.id = commentData.id;
+    updateButton.textContent = "수정";
+
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete_button");
+    deleteButton.dataset.id = commentData.id;
+    deleteButton.textContent = "삭제";
+
+    updateButton.addEventListener("click", (e) => {
+        updateComment(commentData.id);
+    });
+
+    deleteButton.addEventListener("click", (e) => {
+        deleteComment(commentData.id);
+    });
+
+    buttonBlock.appendChild(updateButton);
+    buttonBlock.appendChild(deleteButton);
+
+    commentElement.appendChild(contentBlock);
+    commentElement.appendChild(buttonBlock);
 
     commentList.appendChild(commentElement); // li -> comment_list
 }
@@ -233,7 +307,7 @@ commentSubmitButton.addEventListener("click", async (e) => {
         return;
     }
 
-    const result = await newComment(name, password, content);
+    const result = newComment(name, password, content);
 
     console.log(result);
 
@@ -249,7 +323,17 @@ commentSubmitButton.addEventListener("click", async (e) => {
 });
 
 
+reloadComments();
 
-//updateComment("테스트", "1234", "수정 완료!");
 
-getComments();
+window.addEventListener("scroll", (e) => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+
+    if (!isLoading && currentCommentCount >= showCommentCount && (scrollTop + clientHeight) >= scrollHeight - 10) {
+        showCommentCount += 5;
+        reloadComments();
+
+        console.log(showCommentCount);
+        console.log(isLoading);
+    }
+});
