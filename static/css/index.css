@@ -41,6 +41,14 @@ body {
     color: rgb(97, 255, 223);
 }
 
+.short_intro {
+    margin-top: 50px;
+
+    text-align: center;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-size: 24px;
+}
+
 .card_block {
     width: 90%;
     height: 350px;
@@ -87,7 +95,7 @@ body {
     margin: 0 auto;
 
     text-align: center;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 24px;
     font-weight: bold;
 
@@ -99,7 +107,7 @@ body {
 
     margin-top: 10px;
     margin: 0 auto;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 20px;
     font-weight: bold;
 }
@@ -109,14 +117,14 @@ body {
 
     margin-top: 10px;
     margin: 0 auto;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 20px;
     font-weight: bold;
 }
 
 .blog-link {
     margin: 0 auto;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 16px;
 
     color: rgb(97, 255, 223);

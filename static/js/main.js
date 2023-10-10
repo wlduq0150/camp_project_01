@@ -110,7 +110,7 @@ async function hashPassword(password) {
 }
 
 // 사용 예시: const result = await newComment("이름", "비밀번호", "댓글");
-async function newComment(name, password, comment) {
+async function newComment(name, password, content) {
     // 현재 시간을 id로 설정
     const id = Date.now().toString();
     const time = new Date().toLocaleString('ko-KR');
@@ -121,7 +121,7 @@ async function newComment(name, password, comment) {
         name,
         time,
         password: hashedPassword,
-        comment,
+        comment: content,
     };
   
     // 파이어베이스 참조
