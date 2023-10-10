@@ -1,7 +1,8 @@
 .comment_block {
     width: 90%;
 
-    margin: 0 auto;
+    margin: 0 auto; 
+    margin-top: 40px;
     padding: 16px;
 
     display: flex;
@@ -35,7 +36,7 @@
 }
 
 .comment_content {
-    width: 85%;
+    width: 87%;
     height: 80px;
 }
 
@@ -66,12 +67,13 @@
     height: 100%;
 
     border: none;
-    border-radius: 4px;
-    font-family: 'IBM Plex Sans KR', sans-serif;
-    font-weight: bold;
+    border-radius: 16px;
+
+    font-size: 32px;
+    font-weight: bolder;
 
     color: rgb(255, 255, 255);
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(87, 235, 203);
 
     cursor: pointer;
 }
@@ -88,6 +90,7 @@
     flex-direction: column;
 }
 
+
 .comment_list li {
     margin-top: 20px;
     padding-bottom: 10px;
@@ -95,8 +98,27 @@
     display: flex;
     justify-content: space-between;
 
-    border-bottom: 1px solid rgb(210, 210, 210);
+    
+    position: relative;
+    margin: 50px;
+    
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+    padding-top: 15px;
+    padding-left: 20px;
 }
+
+.comment_list li ::after {
+    border-top:15px solid rgb(255, 255, 255);;
+    border-left: 15px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 0px solid transparent;
+    content:"";
+    position:absolute;
+    top:10px;
+    left:-15px;
+}
+
 
 .comment_list .content_block {
     display: flex;
@@ -106,13 +128,26 @@
 .comment_list span {
     font-size: 18px;
     font-weight: bold;
-    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-family: 'Courier New', Courier, monospace; 
+
+    color: rgb(87, 235, 203);
+}
+
+.comment_list li .time {
+    margin-left: 10px;
+
+    font-size: 14px;
+
+    color: rgb(0, 0, 0);
 }
 
 .comment_list p {
     margin-top: 6px;
     font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 18px;
+    font-family:Arial, Helvetica, sans-serif;
+
+    color: rgb(0, 0, 0);
 }
 
 .comment_list .button_block {
@@ -136,4 +171,15 @@
     background-color: rgb(0, 0, 0);
 
     cursor: pointer;
+    margin-right: 10px;
+}
+
+.comment_list button.update_button {
+    background-color:rgb(87, 235, 203); /* 수정 버튼 배경색 변경 */
+    color: #ffffff; /* 수정 버튼 텍스트 색상 변경 */
+}
+
+.comment_list button.delete_button {
+    background-color: #f44336; /* 삭제 버튼 배경색 변경 */
+    color: #ffffff; /* 삭제 버튼 텍스트 색상 변경 */
 }
