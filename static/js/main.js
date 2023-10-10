@@ -291,8 +291,6 @@ function addCommentToScreen(commentData) {
     commentList.appendChild(commentElement); // li -> comment_list
 }
 
-const commentSubmitButton = document.querySelector(".comment_submit button");
-
 commentSubmitButton.addEventListener("click", async (e) => {
     const name_ = document.querySelector(".comment_name");
     const password_ = document.querySelector(".comment_password");
@@ -306,12 +304,17 @@ commentSubmitButton.addEventListener("click", async (e) => {
         alert("내용은 필수입니다!");
         return;
     }
-
+    
     const result = newComment(name, password, content);
 
-    console.log(result);
-
     if (result) {
+        // Successfully added the comment, now display it
+        addCommentToScreen({
+            name: name,
+            content: content,
+            timestamp: new Date().toISOString(),
+        });
+
         alert("댓글 등록 완료!");
     } else {
         alert("댓글 등록 실패!(이름과 내용은 필수입니다)");
@@ -321,7 +324,6 @@ commentSubmitButton.addEventListener("click", async (e) => {
     password_.value = "";
     content_.value = "";
 });
-
 
 reloadComments();
 
