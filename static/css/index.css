@@ -7,12 +7,22 @@ ul, li {
     list-style: none;
 }
 
+
 .title {
     margin-top: 100px;
 
     text-align: center;
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 32px;
     font-weight: bold;
+}
+
+.short_intro {
+    margin-top: 50px;
+
+    text-align: center;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    font-size: 24px;
 }
 
 .card_block {
@@ -46,7 +56,7 @@ ul, li {
     margin: 0 auto;
 
     text-align: center;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 24px;
     font-weight: bold;
 }
@@ -56,7 +66,7 @@ ul, li {
 
     margin-top: 10px;
     margin: 0 auto;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 20px;
     font-weight: bold;
 }
@@ -66,19 +76,19 @@ ul, li {
 
     margin-top: 10px;
     margin: 0 auto;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 20px;
     font-weight: bold;
 }
 
 .blog-link {
     margin: 0 auto;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 16px;
 }
 
 .motto {
     margin: 0 auto;
-
+    font-family: 'IBM Plex Sans KR', sans-serif;
     text-align: center;
 }
