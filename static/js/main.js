@@ -238,7 +238,6 @@ async function deleteComment(id) {
 
 // { name: "김지엽", password: "1234", content: "하이" }
 function addCommentToScreen(commentData) {
-    console.log(commentData);
     const commentList = document.querySelector(".comment_list");
 
     const commentElement = document.createElement("li");
@@ -335,18 +334,6 @@ commentSubmitButton.addEventListener("click", async (e) => {
 
 reloadComments();
 
-function scrollDelay(func, delay) {
-    let timer;
-    return function () {
-        if (!timer) {
-            timer = setTimeout(() => {
-                func();
-                timer = null;
-            }, delay);
-        }
-    };
-}
-
 function scrollHandler() {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
     if (
@@ -355,17 +342,18 @@ function scrollHandler() {
         scrollTop + clientHeight >= scrollHeight - 10
     ) {
         isLoading = true;
-        showCommentCount += 5;
+        showCommentCount += 3;
         reloadComments()
         .then(() => {
             isLoading = false;
         });
+
+        console.log(showCommentCount);
     }
 }
 
 window.addEventListener(
-    "scroll",
-    scrollDelay((e) => {
+    "scroll", (e) => {
         scrollHandler();
-    }, 1500)
+    }
 );
