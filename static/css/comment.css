@@ -1,10 +1,8 @@
 .comment_block {
     width: 90%;
-
-    margin: 0 auto; 
+    margin: 0 auto;
     margin-top: 40px;
     padding: 16px;
-
     display: flex;
     flex-direction: column;
 }
@@ -16,11 +14,9 @@
 .comment_head input {
     width: 15%;
     height: 30px;
-
     margin-right: 10px;
     padding: 4px;
     box-sizing: border-box;
-
     font-size: 20px;
     font-family: 'IBM Plex Sans KR', sans-serif;
     border-radius: 8px;
@@ -29,7 +25,6 @@
 
 .comment_body {
     margin-top: 10px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -43,13 +38,11 @@
 .comment_content textarea {
     width: 100%;
     height: 100%;
-
     padding: 4px;
     box-sizing: border-box;
     font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 20px;
     border-radius: 12px;
-
     resize: none;
 }
 
@@ -65,23 +58,18 @@
 .comment_submit button {
     width: 100%;
     height: 100%;
-
     border: none;
     border-radius: 16px;
-
     font-size: 32px;
     font-weight: bolder;
-
     color: rgb(255, 255, 255);
     background-color: rgb(87, 235, 203);
-
     cursor: pointer;
 }
 
 .comment_list_block {
     width: 90%;
     min-height: 300px;
-
     margin: 0 auto;
     margin-bottom: 100px;
     padding: 16px;
@@ -94,14 +82,10 @@
 .comment_list li {
     margin-top: 20px;
     padding-bottom: 10px;
-
     display: flex;
     justify-content: space-between;
-
-    
     position: relative;
     margin: 50px;
-    
     background: rgb(255, 255, 255);
     border-radius: 10px;
     padding-top: 15px;
@@ -109,14 +93,15 @@
 }
 
 .comment_list li ::after {
-    border-top:15px solid rgb(255, 255, 255);;
+    border-top: 15px solid rgb(255, 255, 255);
+    ;
     border-left: 15px solid transparent;
     border-right: 0px solid transparent;
     border-bottom: 0px solid transparent;
-    content:"";
-    position:absolute;
-    top:10px;
-    left:-15px;
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: -15px;
 }
 
 
@@ -128,16 +113,13 @@
 .comment_list span {
     font-size: 18px;
     font-weight: bold;
-    font-family: 'Courier New', Courier, monospace; 
-
+    font-family: 'Courier New', Courier, monospace;
     color: rgb(87, 235, 203);
 }
 
 .comment_list li .time {
     margin-left: 10px;
-
     font-size: 14px;
-
     color: rgb(0, 0, 0);
 }
 
@@ -145,8 +127,7 @@
     margin-top: 6px;
     font-family: 'IBM Plex Sans KR', sans-serif;
     font-size: 18px;
-    font-family:Arial, Helvetica, sans-serif;
-
+    font-family: Arial, Helvetica, sans-serif;
     color: rgb(0, 0, 0);
 }
 
@@ -158,28 +139,28 @@
 .comment_list button {
     width: 40px;
     height: 30px;
-
     margin-left: 4px;
-
     border: none;
     border-radius: 4px;
-
     font-size: 16px;
     font-weight: bold;
     font-family: 'IBM Plex Sans KR', sans-serif;
     color: rgb(255, 255, 255);
     background-color: rgb(0, 0, 0);
-
     cursor: pointer;
     margin-right: 10px;
 }
 
 .comment_list button.update_button {
-    background-color:rgb(87, 235, 203); /* 수정 버튼 배경색 변경 */
-    color: #ffffff; /* 수정 버튼 텍스트 색상 변경 */
+    background-color: rgb(87, 235, 203);
+    /* 수정 버튼 배경색 변경 */
+    color: #ffffff;
+    /* 수정 버튼 텍스트 색상 변경 */
 }
 
 .comment_list button.delete_button {
-    background-color: #f44336; /* 삭제 버튼 배경색 변경 */
-    color: #ffffff; /* 삭제 버튼 텍스트 색상 변경 */
+    background-color: #f44336;
+    /* 삭제 버튼 배경색 변경 */
+    color: #ffffff;
+    /* 삭제 버튼 텍스트 색상 변경 */
 }
