@@ -1,13 +1,13 @@
-#camp_project_01
+# camp_project_01
 Let's Introduce our team!
 
-#프로젝트 소개
+# 프로젝트 소개
 팀 6조를 소개하는 웹사이트 입니다.
 
-#개발 기간
+# 개발 기간
 23.10.05일 ~ 22.10.10일 (7,8,9 휴일)
 
-#멤버 구성
+# 멤버 구성
 김지엽  CSS, Javascript, HTML, Firebase
 
 민찬기  CSS, Javascript, HTML
@@ -16,7 +16,7 @@ Let's Introduce our team!
 
 박조은  CSS, Javascript, HTML, Firebase
 
-#주요 기능
+# 주요 기능
 #### 멤버 소개
 - hover 이벤트 및 파이어베이스 프로필 데이터 불러오기 
 
