@@ -70,6 +70,7 @@ cards.forEach((card) => {
 
               // Update card display with fetched profile data
               mbtiSpan.textContent = profile.mbti;
+              blogSpan.href = profile.blog;
               blogSpan.textContent = profile.blog;
               mottoSpan.textContent = profile.motto;
           }
@@ -82,10 +83,10 @@ cards.forEach((card) => {
 });
 
 // Example usage to add data (you can call this when needed)
-addProfileData("김지엽", "ENFJ", "https://example.com/kim-blog", "Live life to the fullest.");
-addProfileData("박조은", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
-addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
-addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
+addProfileData("김지엽", "INTP", " https://velog.io/@wlduq0150", " 취업 부수자!");
+addProfileData("박조은", "INFP", " https://velog.io/@joeunparkdev", "꾸준히 공부하는 개발자가 되자");
+addProfileData("김세웅", "INFP", " https://velog.io/@koznukhan", "최선을 다 하겠습니다!");
+addProfileData("민찬기", "ISTP", " https://bdp930419.tistory.com/", "80점으로 살자");
 
 let showCommentCount = 3;
 let allCommentCount = 3;
@@ -112,11 +113,13 @@ async function hashPassword(password) {
 async function newComment(name, password, comment) {
     // 현재 시간을 id로 설정
     const id = Date.now().toString();
+    const time = new Date().toLocaleString('ko-KR');
     // password 암호화
     const hashedPassword = await hashPassword(password);
     const commentData = {
         id,
         name,
+        time,
         password: hashedPassword,
         comment,
     };
@@ -200,6 +203,14 @@ async function updateComment(id) {
     });
 }
 
+async function deleteAllComment() {
+    const database = firebase.database();
+
+    const commentsRef = database.ref("comments");
+
+    await commentsRef.remove();
+}
+
 async function deleteComment(id) {
     const password = prompt("암호를 입력해주세요.");
     // Hash the provided password (use a library like bcrypt)
@@ -227,6 +238,7 @@ async function deleteComment(id) {
 
 // { name: "김지엽", password: "1234", content: "하이" }
 function addCommentToScreen(commentData) {
+    console.log(commentData);
     const commentList = document.querySelector(".comment_list");
 
     const commentElement = document.createElement("li");
@@ -235,12 +247,26 @@ function addCommentToScreen(commentData) {
     const contentBlock = document.createElement("div");
     contentBlock.classList.add("content_block")
     
+    const spanBlock = document.createElement("div");
+
     const name = document.createElement("span");
     name.textContent = commentData.name;
+    let time;
+    if (commentData.time) {
+        time = document.createElement("span");
+        time.classList.add("time");
+        time.textContent = commentData.time;
+    }
+    
     const content = document.createElement("p");
     content.textContent = commentData.comment;
 
-    contentBlock.appendChild(name);
+    spanBlock.appendChild(name);
+    if (commentData.time) {
+        spanBlock.appendChild(time);
+    }
+
+    contentBlock.appendChild(spanBlock);
     contentBlock.appendChild(content);
 
     const buttonBlock = document.createElement("div");
