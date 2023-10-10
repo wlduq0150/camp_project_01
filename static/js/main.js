@@ -1,12 +1,12 @@
 // Firebase configuration and initialization code
 var firebaseConfig = {
-  apiKey: "AIzaSyBN-75_1oDyA1L-7YT05PIc1rBAm_EToAQ",
-  authDomain: "team6-5d749.firebaseapp.com",
-  databaseURL: "https://team6-5d749-default-rtdb.firebaseio.com",
-  projectId: "team6-5d749",
-  storageBucket: "team6-5d749.appspot.com",
-  messagingSenderId: "867454144316",
-  appId: "1:867454144316:web:a5fa28b431b5fbd0625839"
+    apiKey: "AIzaSyBN-75_1oDyA1L-7YT05PIc1rBAm_EToAQ",
+    authDomain: "team6-5d749.firebaseapp.com",
+    databaseURL: "https://team6-5d749-default-rtdb.firebaseio.com",
+    projectId: "team6-5d749",
+    storageBucket: "team6-5d749.appspot.com",
+    messagingSenderId: "867454144316",
+    appId: "1:867454144316:web:a5fa28b431b5fbd0625839"
 };
 // Initialize Firebase
 var init = firebase.initializeApp(firebaseConfig);
@@ -14,36 +14,36 @@ var init = firebase.initializeApp(firebaseConfig);
 
 // Function to update card styles on mouseover and mouseout
 function updateCardStyles(cardElement, isMouseOver) {
-  cardElement.style.width = isMouseOver ? "30%" : "18%";
-  cardElement.style.height = isMouseOver ? "350px" : "320px";
-  cardElement.querySelector(".mbti").style.display = isMouseOver ? "block" : "none";
-  cardElement.querySelector(".intro").style.display = isMouseOver ? "block" : "none";
-  cardElement.querySelector(".blog").style.display = isMouseOver ? "block" : "none";
-  cardElement.querySelector(".motto").style.display = isMouseOver ? "block" : "none";
+    cardElement.style.width = isMouseOver ? "30%" : "18%";
+    cardElement.style.height = isMouseOver ? "350px" : "320px";
+    cardElement.querySelector(".mbti").style.display = isMouseOver ? "block" : "none";
+    cardElement.querySelector(".intro").style.display = isMouseOver ? "block" : "none";
+    cardElement.querySelector(".blog").style.display = isMouseOver ? "block" : "none";
+    cardElement.querySelector(".motto").style.display = isMouseOver ? "block" : "none";
 }
 
 // Function to add profile data to Firebase
 function addProfileData(name, mbti, blog, motto) {
-  const profileData = {
-      mbti: mbti,
-      blog: blog,
-      motto: motto
-  };
+    const profileData = {
+        mbti: mbti,
+        blog: blog,
+        motto: motto
+    };
 
-  // Reference to the Firebase database
-  const dbRef = firebase.database().ref();
+    // Reference to the Firebase database
+    const dbRef = firebase.database().ref();
 
-  // Reference to the "profiles" node where you want to store the data
-  const profilesRef = dbRef.child("profiles");
+    // Reference to the "profiles" node where you want to store the data
+    const profilesRef = dbRef.child("profiles");
 
-  // Add the data under the team member's name
-  profilesRef.child(name).set(profileData)
-      .then(function() {
-          console.log("Data added to Firebase successfully.");
-      })
-      .catch(function(error) {
-          console.error("Error adding data to Firebase: ", error);
-      });
+    // Add the data under the team member's name
+    profilesRef.child(name).set(profileData)
+        .then(function () {
+            console.log("Data added to Firebase successfully.");
+        })
+        .catch(function (error) {
+            console.error("Error adding data to Firebase: ", error);
+        });
 }
 
 // Attach mouseover event listeners to the cards
@@ -54,32 +54,32 @@ cards.forEach((card) => {
     var name = card.getAttribute("value");
 
     card.addEventListener("mouseover", (e) => {
-      updateCardStyles(e.currentTarget, true);
+        updateCardStyles(e.currentTarget, true);
 
-      // Fetch and display profile data when hovered
-      var profileRef = firebase.database().ref("profiles/" + name);
+        // Fetch and display profile data when hovered
+        var profileRef = firebase.database().ref("profiles/" + name);
 
-      profileRef.on("value", function (snapshot) {
-          var profile = snapshot.val();
+        profileRef.on("value", function (snapshot) {
+            var profile = snapshot.val();
 
-          if (profile) {
-              // Find the card associated with the name
-              var mbtiSpan = card.querySelector(".mbti");
-              var blogSpan = card.querySelector(".blog-link");
-              var mottoSpan = card.querySelector(".motto");
+            if (profile) {
+                // Find the card associated with the name
+                var mbtiSpan = card.querySelector(".mbti");
+                var blogSpan = card.querySelector(".blog-link");
+                var mottoSpan = card.querySelector(".motto");
 
-              // Update card display with fetched profile data
-              mbtiSpan.textContent = profile.mbti;
-              blogSpan.href = profile.blog;
-              blogSpan.textContent = profile.blog;
-              mottoSpan.textContent = profile.motto;
-          }
-      });
-  });
+                // Update card display with fetched profile data
+                mbtiSpan.textContent = profile.mbti;
+                blogSpan.href = profile.blog;
+                blogSpan.textContent = profile.blog;
+                mottoSpan.textContent = profile.motto;
+            }
+        });
+    });
 
-  card.addEventListener("mouseout", (e) => {
-      updateCardStyles(e.currentTarget, false);
-  });
+    card.addEventListener("mouseout", (e) => {
+        updateCardStyles(e.currentTarget, false);
+    });
 });
 
 // Example usage to add data (you can call this when needed)
@@ -93,20 +93,20 @@ let allCommentCount = 3;
 let isLoading = false;
 
 async function hashPassword(password) {
-  try {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password);
+    try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
 
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
 
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
 
-    return hashHex;
-  } catch (error) {
-    console.error('Error hashing password:', error);
-    return null;
-  }
+        return hashHex;
+    } catch (error) {
+        console.error('Error hashing password:', error);
+        return null;
+    }
 }
 
 // 사용 예시: const result = await newComment("이름", "비밀번호", "댓글");
@@ -123,13 +123,13 @@ async function newComment(name, password, content) {
         password: hashedPassword,
         comment: content,
     };
-  
+
     // 파이어베이스 참조
     const dbRef = firebase.database().ref();
-  
+
     // comments 참조
     const profilesRef = dbRef.child("comments");
-  
+
     // id 아래에 댓글 추가
     try {
         await profilesRef.child(id).set(commentData);
@@ -170,7 +170,7 @@ function deleteComments() {
     document.querySelectorAll("li").forEach((comment) => {
         comment.remove();
     });
-} 
+}
 
 async function updateComment(id) {
 
@@ -246,7 +246,7 @@ function addCommentToScreen(commentData) {
 
     const contentBlock = document.createElement("div");
     contentBlock.classList.add("content_block")
-    
+
     const spanBlock = document.createElement("div");
 
     const name = document.createElement("span");
@@ -257,7 +257,7 @@ function addCommentToScreen(commentData) {
         time.classList.add("time");
         time.textContent = commentData.time;
     }
-    
+
     const content = document.createElement("p");
     content.textContent = commentData.comment;
 
@@ -312,7 +312,7 @@ commentSubmitButton.addEventListener("click", async (e) => {
         alert("내용은 필수입니다!");
         return;
     }
-    
+
     const result = newComment(name, password, content);
 
     if (result) {
@@ -357,9 +357,9 @@ function scrollHandler() {
         isLoading = true;
         showCommentCount += 5;
         reloadComments()
-        .then(() => {
-            isLoading = false;
-        });
+            .then(() => {
+                isLoading = false;
+            });
     }
 }
 
