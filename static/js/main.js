@@ -88,7 +88,7 @@ addProfileData("김세웅", "ENFP", "https://example.com/kim-blog", "Live life t
 addProfileData("민찬기", "ENFP", "https://example.com/kim-blog", "Live life to the fullest.");
 
 let showCommentCount = 3;
-let currentCommentCount = 3;
+let allCommentCount = 3;
 let isLoading = false;
 
 async function hashPassword(password) {
@@ -141,8 +141,6 @@ async function newComment(name, password, comment) {
 
 
 async function reloadComments() {
-    isLoading = true;
-
     deleteComments();
 
     const database = firebase.database();
@@ -152,7 +150,7 @@ async function reloadComments() {
     const commentsData = (await commentsRef.once("value")).val();
 
     if (commentsData) {
-        const commentIds = Object.keys(commentsData);
+        const commentIds = Object.keys(commentsData).reverse();
 
         commentIds
             .slice(0, showCommentCount)
@@ -161,24 +159,8 @@ async function reloadComments() {
                 addCommentToScreen({ id, ...commentData });
             });
 
-        currentCommentCount = commentIds.length;
+        allCommentCount = commentIds.length;
     }
-
-
-    // commentsRef.once("value", (snapshot) => {
-    //     const commentsData = snapshot.val();
-
-    //     if (commentsData) {
-    //         Object.keys(commentsData)
-    //             .slice(0, showCommentCount)
-    //             .forEach((id) => {
-    //                 const commentData = commentsData[id];
-    //                 addCommentToScreen({ id, ...commentData });
-    //             });
-    //     }
-    // });
-
-    isLoading = false;
 }
 
 function deleteComments() {
@@ -327,15 +309,37 @@ commentSubmitButton.addEventListener("click", async (e) => {
 
 reloadComments();
 
+function scrollDelay(func, delay) {
+    let timer;
+    return function () {
+        if (!timer) {
+            timer = setTimeout(() => {
+                func();
+                timer = null;
+            }, delay);
+        }
+    };
+}
 
-window.addEventListener("scroll", (e) => {
+function scrollHandler() {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-
-    if (!isLoading && currentCommentCount >= showCommentCount && (scrollTop + clientHeight) >= scrollHeight - 10) {
+    if (
+        !isLoading &&
+        allCommentCount > showCommentCount &&
+        scrollTop + clientHeight >= scrollHeight - 10
+    ) {
+        isLoading = true;
         showCommentCount += 5;
-        reloadComments();
-
-        console.log(showCommentCount);
-        console.log(isLoading);
+        reloadComments()
+        .then(() => {
+            isLoading = false;
+        });
     }
-});
+}
+
+window.addEventListener(
+    "scroll",
+    scrollDelay((e) => {
+        scrollHandler();
+    }, 1500)
+);
